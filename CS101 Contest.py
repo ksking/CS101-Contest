@@ -3,7 +3,7 @@
 #        figure out how to write the resulting html file to a separate file and then display it
 #        add other homepages to the cache
 #        add linked pages to the cache
-#        get rid of all newline denotations ("\n") do this in split_string
+
 
 
 #-------------------------------------------------------------------
@@ -57,7 +57,7 @@ def create_custom_gallery(seed, search_list):
 #-------------------------------------------------------------------
 def crawl_member_gallery(seed):
     m_dict = create_member_dictionary(seed)
-    tocrawl = pull_keys(m_dict)      #  gets a list of all homepages for members
+    tocrawl = m_dict.keys()      #  gets a list of all homepages for members
     crawled = []
     index = {}
     # crawl the homepage of each member
@@ -116,11 +116,11 @@ def create_member_dictionary(seed):
 #    output: list of keys from the dictionary
 # New procedure
 #-------------------------------------------------------------------#
-def pull_keys(dict):
-    result = []
-    for entry in dict:
-        result.append(entry)
-    return result
+#def pull_keys(dict):
+#    result = []
+#    for entry in dict:
+#        result.append(entry)
+#    return result
 
 
 #-------------------------------------------------------------------
@@ -219,8 +219,11 @@ def add_page_to_index(index, url, content):
     if not content:
         return
     content = strip_html_tags(content)
+    print content
     words = split_string(content,[' ', ',', '.', '!', '?', ':', ';', '"',
-                                  '/', "'", ')', '(', '{', '}', '[', ']'])
+                                  '/', "'", ')', '(', '{', '}', '[', ']', '\n', '\t',
+                                  '|'])
+    print words
     for word in words:
         add_to_index(index, word, url)
 
@@ -239,8 +242,13 @@ def strip_html_tags(string):
         start_tag = string.find('<', end_tag)   # find start of a tag
         if start_tag == -1:        # no more <?  we are done
             return output
-        output = output + ' ' + string[end_tag:start_tag]   # add everything up to this start tag
-        end_tag = string.find('>', start_tag)        # find end of the tag
+        output = output + ' ' + string[end_tag:start_tag]   # add all to this start tag
+        # have found start of an html tag, could it be a comment?
+        start_html_cmt = string.find('<!--', end_tag)
+        if start_html_cmt == start_tag:   #  yes, this is an html comment
+            end_tag = string.find('-->',start_tag) + 2    # look for end html cmt
+        else:
+            end_tag = string.find('>', start_tag)        # find end of the tag
         if end_tag == -1:
             # very curious, had a start tag with no end tag
             return output
@@ -840,7 +848,7 @@ Fiberart, fiber art, wall hangings, canvas work, mixed media, Joan Wolfer, Fiber
                   <p class="paragraph_style_2">                                      Estes Park, Colorado<br /></p>
                   <p class="paragraph_style_2">August 13,14 - Salida Riverside Fine Arts <br /></p>
                   <p class="paragraph_style_2">                             Festival<span class="style_1"><br /></span></p>
-                  <p class="paragraph_style_2">August 20,21 - Golden Fine Arts Festival<br /></p>
+                  <p class="paragraph_style_2">August 20,21 - Golden    Fine Arts Festival<br /></p>
                   <p class="paragraph_style_2">September 3,4 &amp; 5 - Commonwheel Artists <br /></p>
                   <p class="paragraph_style_2">                        Co-Op Art Festival                             <br /></p>
                   <p style="padding-bottom: 0pt; " class="paragraph_style_2">October 1,2 - Taos Wool Festival</p>
@@ -889,14 +897,14 @@ Fiberart, fiber art, wall hangings, canvas work, mixed media, Joan Wolfer, Fiber
 
 
 myurl = 'http://www.handweaversofboulder.org/membergallery.html'
-#mydict = create_member_dictionary(myurl)
+#mydict = crawl_member_gallery(myurl)
 #myi, myd = crawl_member_gallery(myurl)
 #print "INDEX"
 #print myi
 #print "  "
 #print "DICTIONARY"
 #print myd
-newpage = create_custom_gallery(myurl,['create', 'the', 'fOr'])
+newpage = create_custom_gallery(myurl,['create', 'Joan'])
 
 print newpage
 #print myi
