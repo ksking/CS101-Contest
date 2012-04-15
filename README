@@ -1,1 +1,36 @@
-More later
+My program is the beginnings of an enhancement to the members galley page (www.handweaversofboulder.org/membergallery.html)
+of the Handweavers Guild of Boulder website (www.handweaversofboulder.org).  I am the volunteer website monitor for this site.
+The members gallery page contains an entry for Guild members who want to publicize their work.  For quite a while I have
+wanted to provide visitors to this webpage the ability to search on these member entries to get a list of the
+entries that satisfy their search criteria.  Now I can do this with an actual search of the members' websites.
+
+My code is in "CS101 Contest.py".  I have two text files that I read into the program. 'CS101_Contest_cache.txt'
+contains a cache of the contents of the websites of the entries on the member gallery page.  I have not yet
+explored the protocol required when searching the web, so I do my search offline for now.
+The other text file is "CS101_Contest_headerinfo.txt" which contains
+the main portions of the html file that I will produce with the visitor's search results.
+
+I've made quite a few extensions to the search engine we created in CS101:
+ *  for each member site, only crawl the pages within the domain of that site
+ *  when searching for target urls, allow for href attributes that aren't right after the a tag
+ *  when searching for urls within an href attribute, allow for the use of single or double quotes
+ *  the lookup function uses multiple words, but does not require those words to be consecutive in the
+    target url, and returns all the urls that satisfy any of the search arguments
+ *  remove html tags and comments before pulling keywords out of the webpages
+ *  use a variety of word delimitors in splitting the text into words
+ *  translated all words in the index, and words in the search list to lowercase
+ *  when searching for certain fiber-related words, use different variations of that word also
+    (i.e. for "weave", add "weaving", "weaves", "weaver", and "wove" to the search list)
+ *  the output is an html page containing all the entries whose webpages satisfy the search list
+ 
+ Things I still want to do:
+  *  figure out the protocol of searching the web courteously and do the searching on the web
+  *  update my members gallery page to include the search function on that webpage
+  *  display the resulting html page automatically
+  *  rethink my search strategy of returning all urls that satisfy any of the search keywords -- do
+     something more sophisticated, research other search applications on other websites to see what kind of
+	 search arguments to provide for my users (i.e. which keywords must appear, which ones must be in sequence ...)
+  *  when looking at other people's code for this contest I realized that a bunch of the tedious parsing I am doing
+	 to get rid of html comments, html tags, find urls anywhere inside an <a> tag, can be done much more easily with
+	 string functions available in Python, but not covered in CS101.  I want to explore those functions in order to
+	 simplify my code
